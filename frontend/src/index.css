@@ -1,68 +1,23 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@utility bg-main {
+  @apply bg-white text-black;
+  @apply dark:bg-black dark:text-white;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+@utility sidebar {
+  @apply border-r border-color pb-5 h-screen transition-all duration-500 ease-in-out flex flex-col overflow-x-hidden;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+@utility sidebar_footer {
+  @apply mt-auto justify-between flex items-center border-t border-color ;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+@utility border-color {
+  @apply border-black/20 dark:border-white/20;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+@utility iconBtn {
+  @apply p-1 border border-blue-800/50 bg-blue-800/50  rounded cursor-pointer shadow-2xl;
+  @apply hover:border-blue-800 hover:bg-blue-800 hover:shadow-blue-800;
 }
