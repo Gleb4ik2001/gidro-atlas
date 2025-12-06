@@ -21,3 +21,18 @@
   @apply p-1 border border-blue-800/50 bg-blue-800/50  rounded cursor-pointer shadow-2xl;
   @apply hover:border-blue-800 hover:bg-blue-800 hover:shadow-blue-800;
 }
+
+
+.region-label {
+  font-size: 14px;
+  width:1rem;
+  white-space: wrap;
+  font-weight: bold;
+  color: darkblue;
+  pointer-events: none;
+
+  &::after{
+    content:'region';
+    margin-left:5px;
+  }
+}

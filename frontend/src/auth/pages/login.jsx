@@ -3,22 +3,38 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useAuth} from '../hooks.jsx';
 import {useNavigate} from 'react-router';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 
 const Login = () => {
+  const [msg , setMsg] = useState();
   const {login} = useAuth();
   let nav = useNavigate();
   
   const [usrname , setUsrname] = useState();
   const [pwd , setPwd] = useState();
 
-  const handleForm = (e) =>{
+  const handleForm = async (e) =>{
     e.preventDefault();
-    if(login(usrname , pwd)) nav('/' , {replace: true});
-
+    const result = await login(usrname , pwd);
+    if(result.state){
+      setMsg({state: 'success' , detail:result.detail});
+      setTimeout(() => {
+        nav('/' , {replace: true});
+      }, 2000);
+    }
+    else{
+      setMsg({state: 'error' , detail:result.detail});
+      setUsrname();
+      setPwd();
+    }
   }
 
   return(
     <main className='flex size-full min-w-full min-h-screen items-center justify-center'>
+      {msg && <Alert variant="filled" severity={msg.state} sx={{position: 'absolute' , top:'5%',}}>
+        {msg.detail}
+      </Alert>}
       <div className='min-w-[25vw] bg-blue-500/40 rounded-sm p-5 flex flex-col gap-5'>
         <h1 className='self-center text-4xl'>Login</h1>
         <form className='flex flex-col gap-5' onSubmit={handleForm}>

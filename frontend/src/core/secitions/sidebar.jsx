@@ -12,24 +12,28 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`sidebar ${ open ? 'w-[250px]' : 'w-[50px]'}`}
-    >
+      className={`sidebar ${ open ? 'w-[250px]' : 'w-[50px]'}`}>
       <div className={`flex justify-between items-center h-16 border-b border-color ${open ? 'p-2' : 'p-1'}`}>
-        {open ? <h1>Gidro Atlas</h1> : null}
+        {open ? <h1 className='text-2xl'>Gidro Atlas</h1> : null}
         <button
           className='iconBtn'
           onClick={() => setOpen(!open)}>
           { open ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon/>}
         </button>  
       </div>
+
       <div className='sidebar_body'>
       </div>
-      <div className={`sidebar_footer ${open ? 'p-2' : 'p-1'} pt-5`}>
+
+      <div className={`sidebar_footer ${open ? 'p-2' : 'p-1'}`}>
         {
           open ?
           <>
           <h1>AVA</h1>
-          <h1>{user.name}</h1>
+              <div className='flex flex-col'>
+                <h1  className='capitalize  text-2xl'>{user.name}</h1>
+                <h3 className='text-xl text-black/50 dark:text-white/50'>{user.role}</h3>
+              </div>
           </>: null
         }
         <button className='iconBtn' onClick={()=> logout()}><LogoutIcon /></button>
