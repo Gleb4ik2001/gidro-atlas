@@ -13,20 +13,34 @@
   @apply mt-auto justify-between flex items-center border-t border-color ;
 }
 
+@utility sidebar_body {
+  @apply  flex flex-col gap-2;
+}
+
+
 @utility border-color {
   @apply border-black/20 dark:border-white/20;
 }
 
-@utility iconBtn {
-  @apply p-1 border border-blue-800/50 bg-blue-800/50  rounded cursor-pointer shadow-2xl;
+@utility blue-color {
+  @apply border-blue-800/50 bg-blue-800/50;
   @apply hover:border-blue-800 hover:bg-blue-800 hover:shadow-blue-800;
+}
+
+@utility divider {
+  @apply border-color w-full h-1 border-t-2;
+}
+
+
+@utility iconBtn {
+  @apply p-1 border blue-color  rounded cursor-pointer shadow-2xl;
 }
 
 
 .region-label {
   font-size: 14px;
   width:1rem;
-  white-space: wrap;
+  white-space: nowrap;
   font-weight: bold;
   color: darkblue;
   pointer-events: none;
@@ -34,5 +48,32 @@
   &::after{
     content:'region';
     margin-left:5px;
+  }
+}
+
+.marker-default { background: lightblue; }
+.marker-green { background: green; }
+.marker-lightgreen { background: limegreen; }
+.marker-yellow { background: yellow; }
+.marker-orange { background: orange; }
+.marker-red { background: crimson; }
+
+
+.marker {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid white;
+  animation: pulse-animation 2s infinite;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
   }
 }

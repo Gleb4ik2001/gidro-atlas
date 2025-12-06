@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import { Marker, Popup } from 'react-leaflet';
 import kazakhstanRegions from '../data/region.json';
 import  kazakhstanBorder from '../data/country.json';
 import kazakhstanWaters from '../data/waterways.json';
+import * as turf from '@turf/turf';
 
 function InfoControl({ info }) {
   return (
@@ -83,8 +85,28 @@ function LabelsLayer({ data, propertyName , clsName}) {
   return null;
 }
 
-export default function TerrainMap() {
+const makeCssIcon = (cls) =>
+    L.divIcon({
+      className: `marker ${cls}`,
+      html: ``,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+const getIconByCategory = (category) => {
+  switch(category) {
+    case 1: return makeCssIcon('marker-green');
+    case 2: return makeCssIcon('marker-lightgreen');
+    case 3: return makeCssIcon('marker-yellow');
+    case 4: return makeCssIcon('marker-orange');
+    case 5: return makeCssIcon('marker-red');
+    default: return makeCssIcon('marker-default');
+  }
+};
+
+export default function TerrainMap({showLakes, markers}) {
   const [info, setInfo] = useState(null);
+
 
   return (
     <MapContainer
@@ -102,13 +124,37 @@ export default function TerrainMap() {
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}"
         attribution="&copy; Esri"
       />
-      
+
       <CountryBorder data={kazakhstanBorder} />
 
       <RegionLayer data={kazakhstanRegions} setInfo={setInfo} />
       <LabelsLayer data={kazakhstanRegions} propertyName="NAME_1" clsName='region-label'/>
-      <RiversLayer data={kazakhstanWaters} />
-      
+      {showLakes ? 
+        <>
+          <RiversLayer data={kazakhstanWaters} />
+        </>
+        : ''}
+
+
+      {markers && markers.map((marker, i) => (
+        <Marker
+          key={`marker-${i}`}
+          position={marker.postion}
+          icon={getIconByCategory(marker.category)}
+          eventHandlers={{
+            mouseover: (e) => e.target.openPopup(),
+            mouseout: (e) => e.target.closePopup(),
+          }}
+        >
+          <Popup>
+            <h1 className='font-black text-xl'>
+              {marker.name}
+            </h1>
+            <h1>{marker.region}</h1>
+          </Popup>
+        </Marker>
+      ))}
+
       {/* информация о регионе */}
       <InfoControl info={info} />
     </MapContainer>
