@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '../../auth/hooks.jsx';
 import IconButton from '@mui/material/IconButton';
@@ -19,13 +18,51 @@ const fakeData = [
   { name: 'category', label: 'Выберите категорию состояния', data: ['Категория 1', 'Категория 2', 'Категория 3', 'Категория 4', 'Категория 5'] },
 ];
 
-const Sidebar = ({ setShowLakes, onFilterSubmit }) => {
+const Filters = ({filters , handleSelectChange , handleSubmit}) => {
+  return(
+    <>
+      <h1 className='uppercase font-light text-2xl border-color'>Фильтрация</h1>
+        {fakeData.map((data, j) => (
+          <select
+            key={j}
+            className='p-2 rounded blue-color cursor-pointer w-full mb-2'
+            name={data.name}
+            value={filters[data.name] || ''}
+            onChange={handleSelectChange}
+          >
+            <option value="">{data.label}</option>
+            {data.data.map((item, i) => (
+              <option key={i} value={item}>{item}</option>
+            ))}
+          </select>
+        ))}
+
+        <Button variant='contained' color='primary' onClick={handleSubmit} className='mt-2 w-full'>
+          Применить фильтры
+        </Button>
+    </>
+  )
+}
+
+const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReserviors }) => {
   const [open, setOpen] = useState(true);
   const [filters, setFilters] = useState({});
   const { user, logout } = useAuth();
 
-  const handleCheckboxChange = (event) => {
-    setShowLakes(prev => !prev);
+  const handleCheckboxChange = (event , key) => {
+    switch (key) {
+      case 0:
+        setShowLakes(prev => !prev);
+        break;
+      case 1:
+        setShowCanals(prev => !prev);
+        break;
+      case 2:
+        setShowReserviors(prev => !prev);
+        break; 
+      default:
+        break;
+    }  
   };
 
   const handleSelectChange = (event) => {
@@ -58,36 +95,17 @@ const Sidebar = ({ setShowLakes, onFilterSubmit }) => {
       </div>
 
       <div className={`sidebar_body ${open ? 'p-2' : 'p-1'}`}>
-        {/* Слои на карте */}
-        {['озёра', 'каналы', 'водохранилища'].map((item, i) => (
+        {['озёра , реки, пруды', 'каналы', 'водохранилища'].map((item, i) => (
           <div key={i} className='flex justify-between items-center'>
-            <h1 className='capitalize text-lg'>{item}</h1>
-            <Checkbox sx={{ color: 'white' }} onChange={handleCheckboxChange} icon={<VisibilityOffIcon />} checkedIcon={<VisibilityIcon />} />
+            {open ? <h1 className='capitalize text-lg'>{item}</h1> : ''}
+            <Checkbox sx={{ color: 'white' }} onChange={(e) =>handleCheckboxChange(e, i)} icon={<VisibilityOffIcon />} checkedIcon={<VisibilityIcon />} />
           </div>
         ))}
 
         <span className='divider mb-5'></span>
-        <h1 className='uppercase font-light text-2xl border-color'>Фильтрация</h1>
+        
+        {user.role === 'expert' && open ? <Filters filters={filters} handleSelectChange={handleSelectChange} handleSubmit={handleSubmit} /> : ''}
 
-        {/* Динамические select */}
-        {fakeData.map((data, j) => (
-          <select
-            key={j}
-            className='p-2 rounded blue-color cursor-pointer w-full mb-2'
-            name={data.name}
-            value={filters[data.name] || ''}
-            onChange={handleSelectChange}
-          >
-            <option value="">{data.label}</option>
-            {data.data.map((item, i) => (
-              <option key={i} value={item}>{item}</option>
-            ))}
-          </select>
-        ))}
-
-        <Button variant='contained' color='primary' onClick={handleSubmit} className='mt-2 w-full'>
-          Применить фильтры
-        </Button>
       </div>
 
       <div className={`sidebar_footer ${open ? 'p-2' : 'p-1'}`}>

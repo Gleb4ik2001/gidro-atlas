@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from './secitions/sidebar.jsx';
 import Sortbar from './secitions/sortbar.jsx';
 import TerrainMap from './secitions/map.jsx';
+import {useAuth} from '../auth/hooks.jsx';
 
 const fake = [
   {
@@ -38,16 +39,21 @@ const fake = [
 
 const Dashboard = () => {
   const [showLakes , setShowLakes] = useState(false);
+  const [showCanals , setShowCanals] = useState(false);
+  const [showReserviors , setShowReserviors] = useState(false);
   const [markers , setMarkers] = useState([]);
+
+  const{user} = useAuth();
 
   useEffect(() => {
     setMarkers(fake);
   }, []);
   return (
     <div className='grid grid-cols-[auto_1fr_auto] gap-5'>
-      <Sidebar setShowLakes={setShowLakes}/>
-      <TerrainMap showLakes={showLakes} markers={markers}/>
-      <Sortbar/>
+      <Sidebar setShowLakes={setShowLakes} setShowCanals={setShowCanals} setShowReserviors={setShowReserviors}/>
+      <TerrainMap showLakes={showLakes} markers={markers} showReserviors={showReserviors} showCanals={showCanals}/>
+      {user.role ==='expert' ?
+      <Sortbar/> : ''}
     </div>
   )
 }

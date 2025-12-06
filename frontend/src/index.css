@@ -36,6 +36,11 @@
   @apply p-1 border blue-color  rounded cursor-pointer shadow-2xl;
 }
 
+@utility inputStyle {
+  @apply p-2 border blue-color  rounded cursor-pointer outline-0 text-2xl;
+}
+
+
 
 .region-label {
   font-size: 14px;
@@ -49,6 +54,15 @@
     content:'region';
     margin-left:5px;
   }
+}
+.lake-label {
+  font-size: 12px;
+  width:1rem;
+  white-space: nowrap;
+  font-weight: bold;
+  color: black;
+  pointer-events: none;
+
 }
 
 .marker-default { background: lightblue; }

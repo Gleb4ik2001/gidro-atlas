@@ -4,8 +4,11 @@ import L from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
 import kazakhstanRegions from '../data/region.json';
 import  kazakhstanBorder from '../data/country.json';
-import kazakhstanWaters from '../data/waterways.json';
-import * as turf from '@turf/turf';
+import kazakhstanLakes from '../data/waterWays_lakes_cleaned.json';
+import kazakhstaRivers from '../data/waterWays_rivers_cleaned.json';
+import kazakhstanCanals from '../data/waterWays_canals_cleaned.json';
+import kazakhstanReservoirs from '../data/waterWays_reservoir_cleaned.json';
+
 
 function InfoControl({ info }) {
   return (
@@ -15,21 +18,6 @@ function InfoControl({ info }) {
     </div>
   );
 }
-
-// GeoJSON слой регионов
-function RegionLayer({ data, setInfo }) {
-  const map = useMap();
-
-  const style = feature => ({
-    fillColor: '#3388ff',
-    weight: 1,
-    color: 'purple',
-    fillOpacity: 0
-  });
-
-  return <GeoJSON data={data} style={style} />;
-}
-
 
 function CountryBorder({ data }) {
   return <GeoJSON data={data} style={{ color: 'black', weight: 2, fillOpacity: 0 }} />;
@@ -43,10 +31,37 @@ function RiversLayer({ data }) {
     fillColor: '#3388ff',
     weight: 1,
     color: 'blue',
-    fillOpacity: 0
+    fillOpacity: 0.5
   });
 
-  return <GeoJSON data={data} style={style} />;
+  const onEachFeature = (feature, layer) => {
+    if (feature.properties && feature.properties.name) {
+      layer.bindTooltip(feature.properties.name, {
+        permanent: false, 
+        direction: 'top',
+        offset: [0, -5]
+      });
+
+      layer.on('mouseover', e => {
+        e.target.setStyle({
+          fillOpacity: 0.7,
+          color: 'blue'
+        });
+      });
+      layer.on('mouseout', e => {
+        e.target.setStyle({
+          fillOpacity: 0.5,
+          color: 'blue'
+        });
+      });
+
+      layer.on('click', () => {
+        setInfo(feature.properties);
+      });
+    }
+  };
+
+  return <GeoJSON data={data} style={style} onEachFeature={onEachFeature} />;
 }
 
 function LabelsLayer({ data, propertyName , clsName}) {
@@ -104,7 +119,7 @@ const getIconByCategory = (category) => {
   }
 };
 
-export default function TerrainMap({showLakes, markers}) {
+export default function TerrainMap({showLakes, showCanals, showReserviors, markers}) {
   const [info, setInfo] = useState(null);
 
 
@@ -121,20 +136,30 @@ export default function TerrainMap({showLakes, markers}) {
       style={{ height: '100vh', width: '100%' }}
     >
       <TileLayer
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}"
-        attribution="&copy; Esri"
+        url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
+        minZoom={0}
+        maxZoom={20}
+        attribution='&copy; Stadia Maps &copy; OpenMapTiles &copy; OpenStreetMap contributors'
       />
 
       <CountryBorder data={kazakhstanBorder} />
 
-      <RegionLayer data={kazakhstanRegions} setInfo={setInfo} />
-      <LabelsLayer data={kazakhstanRegions} propertyName="NAME_1" clsName='region-label'/>
       {showLakes ? 
         <>
-          <RiversLayer data={kazakhstanWaters} />
+          <RiversLayer data={kazakhstanLakes} />
+          <RiversLayer data={kazakhstaRivers} />
         </>
         : ''}
-
+      {showReserviors ? 
+        <>
+          <RiversLayer data={kazakhstanReservoirs} />
+        </>
+        : ''}
+      {showCanals ? 
+        <>
+          <RiversLayer data={kazakhstanCanals} />
+        </>
+        : ''}
 
       {markers && markers.map((marker, i) => (
         <Marker

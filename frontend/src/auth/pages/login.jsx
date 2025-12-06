@@ -35,24 +35,25 @@ const Login = () => {
       {msg && <Alert variant="filled" severity={msg.state} sx={{position: 'absolute' , top:'5%',}}>
         {msg.detail}
       </Alert>}
-      <div className='min-w-[25vw] bg-blue-500/40 rounded-sm p-5 flex flex-col gap-5'>
-        <h1 className='self-center text-4xl'>Login</h1>
+      <div className='min-w-[20vw] bg-blue-500/40 rounded-sm py-8 px-5 flex flex-col gap-5'>
+        <h1 className='self-center text-4xl'>Авторизация</h1>
         <form className='flex flex-col gap-5' onSubmit={handleForm}>
-          <TextField
+          <input
             required
+            className='inputStyle'
             onChange = {(e) => setUsrname(e.target.value)}
             id="outlined-required"
-            label="Логин"
+            placeholder="Логин"
           />
-          <TextField
+          <input 
             required
+            className='inputStyle'
             id="outlined-password-input"
             onChange = {(e) => setPwd(e.target.value)}
-            label="Пароль"
+            placeholder="Пароль"
             type="password"
-            autoComplete="current-password"
           />
-          <Button variant="contained" type='submit'>Войти</Button>
+          <Button variant="contained" type='submit' sx={{padding:'10px' , fontSize:'25px'}}>Войти</Button>
         </form>
       </div>
     </main>
