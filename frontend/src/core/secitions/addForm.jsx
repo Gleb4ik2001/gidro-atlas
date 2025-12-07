@@ -30,26 +30,23 @@ const AddForm = ({setForm})=> {
     try {
       const token = localStorage.getItem("access");
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/main/objects",
+        "http://127.0.0.1:8000/api/main/objects/",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-      console.log("Объект добавлен:", res.data);
-      if (onSuccess) onSuccess(res.data);
+      alert("Объект добавлен");
 
       setFormData({
         name: "",
         region: "",
-        resource_type: "reservoir",
-        water_type: "fresh",
+        resource_type: "",
+        water_type: "",
         fauna: false,
         latitude: "",
         longitude: "",
         passport_date: "",
-        priority: 1,
-        technical_condition: 1
       });
     } catch (err) {
       console.error(err);

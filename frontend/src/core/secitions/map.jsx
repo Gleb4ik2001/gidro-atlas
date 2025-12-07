@@ -46,7 +46,7 @@ function InfoControl({ info, onClose }) {
         </div>
         {info.pdf ? (
           <a
-            href={info.pdf}
+            href={info.pdf.url}
             target="_blank"
             rel="noopener noreferrer"
             className="iconBtn text-2xl"
@@ -238,7 +238,7 @@ export default function TerrainMap({showLakes, showCanals, showReserviors, marke
       {markers && markers.map((marker, i) => (
         <Marker
           key={`marker-${i}`}
-          position={marker.coordinates}
+          position={[marker.coordinates[1] , marker.coordinates[0]] }
           icon={getIconByCategory(marker.technical_condition)}
           eventHandlers={{
             mouseover: (e) => e.target.openPopup(),
