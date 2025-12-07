@@ -48,7 +48,7 @@ class WaterObject(models.Model):
 
     fauna = models.BooleanField(verbose_name='наличие фауны', default=False)
     passport_date = models.DateField(verbose_name='дата паспорта', null=True, blank=True)
-    technical_condition = models.PositiveSmallIntegerField(verbose_name='техническое состояние', default=1)
+    technical_condition = models.PositiveSmallIntegerField(verbose_name='техническое состояние', null=True, blank=True)
 
     latitude = models.FloatField(verbose_name='широта')
     longitude = models.FloatField(verbose_name='долгота')
