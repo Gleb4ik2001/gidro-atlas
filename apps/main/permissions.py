@@ -7,7 +7,9 @@ class IsExpert(permissions.BasePermission):
         return user.is_authenticated and user.role == 'expert'
     
     
-class IsGuest(permissions.BasePermission):
-    def has_permission(self, request:HttpRequest, view):
+class ReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
         user = request.user
-        return user.is_authenticated and user.role == 'guest'
+        if request.method in permissions.SAFE_METHODS:
+            return user.is_authenticated
+        return False
