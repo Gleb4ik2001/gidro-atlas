@@ -238,7 +238,7 @@ export default function TerrainMap({showLakes, showCanals, showReserviors, marke
       {markers && markers.map((marker, i) => (
         <Marker
           key={`marker-${i}`}
-          position={[marker.coordinates[1] , marker.coordinates[0]] }
+          position={[marker.coordinates[0] , marker.coordinates[1]] }
           icon={getIconByCategory(marker.technical_condition)}
           eventHandlers={{
             mouseover: (e) => e.target.openPopup(),

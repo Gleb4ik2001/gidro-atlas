@@ -1,7 +1,7 @@
 
 export const filters_data = [
   { 
-    name: 'regions', 
+    name: 'region', 
     label: 'Выберите область', 
     data: [ 
       { value:"akmola", label:"Акмолинская"},

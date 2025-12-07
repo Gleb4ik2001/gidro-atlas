@@ -42,7 +42,7 @@ const Filters = ({filters , handleSelectChange , handleSubmit}) => {
 
 const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReserviors , setMarkers }) => {
   const [open, setOpen] = useState(true);
-  const [form , setForm] = useState(true);
+  const [form , setForm] = useState(false);
   const [filters, setFilters] = useState({});
   const { user, logout } = useAuth();
 

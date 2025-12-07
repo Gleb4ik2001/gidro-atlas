@@ -27,6 +27,13 @@ const Sortbar = ({setShowLakes , markers}) => {
     4: "Плохое",
     5: "Критическое"
   };
+
+const priorityText = (value) => {
+  if (value >= 0.8) return "Высокий";
+  if (value >= 0.5) return "Средний";
+  return "Низкий";
+};
+
   const demoRow = markers.map((item, index) => ({
     id: index + 1,
     Название: item.name,
@@ -36,7 +43,7 @@ const Sortbar = ({setShowLakes , markers}) => {
     'Наличие фауны': item.fauna ? 'Да' : 'Нет',
     'Дата паспорта': item.passport_date,
     'Категория состояния': technicalConditionText[item.technical_condition],
-    'Приоритет обследования': item.priority // можно преобразовать в текст, если нужно
+    'Приоритет обследования': priorityText(item.ml_attention_probability)
   }));
 
   return (

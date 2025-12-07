@@ -7,8 +7,8 @@ const AddForm = ({setForm})=> {
  const [formData, setFormData] = useState({
     name: "",
     region: "",
-    resource_type: "reservoir",
-    water_type: "fresh",
+    resource_type: "",
+    water_type: "",
     fauna: false,
     latitude: "",
     longitude: "",
