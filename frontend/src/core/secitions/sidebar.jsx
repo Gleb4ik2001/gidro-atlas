@@ -10,6 +10,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 import {filters_data} from '../data/sidebar_data.jsx'
 import AddForm from './addForm.jsx';
+import axios from 'axios';
 
 const Filters = ({filters , handleSelectChange , handleSubmit}) => {
   return(
@@ -39,7 +40,7 @@ const Filters = ({filters , handleSelectChange , handleSubmit}) => {
 
 
 
-const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReserviors }) => {
+const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReserviors , setMarkers }) => {
   const [open, setOpen] = useState(true);
   const [form , setForm] = useState(true);
   const [filters, setFilters] = useState({});
@@ -69,17 +70,24 @@ const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReservio
     }));
   };
 
-  const handleSubmit = () => {
-    // Отправка фильтров наверх или на Django
-    console.log('Submitted filters:', filters);
-    if (onFilterSubmit) onFilterSubmit(filters);
-    // Пример fetch на Django:
-    // fetch('/api/objects/filter/', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(filters)
-    // }).then(res => res.json()).then(data => console.log(data));
-  };
+  const handleSubmit = async () => {
+    try {
+      console.log(filters);
+      const token = localStorage.getItem("access");
+
+      const res = await axios.get(
+        "http://127.0.0.1:8000/api/main/objects/",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: filters,
+        }
+      );
+
+      console.log(res.data);
+      setMarkers(res.data);
+    } catch (err) {
+      console.error(err);
+    }};
 
   return (
     <div className={`sidebar ${open ? 'w-[250px]' : 'w-[50px]'}`}>

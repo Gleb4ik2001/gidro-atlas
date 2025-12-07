@@ -64,10 +64,11 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, []); 
+  }, []);
+
   return (
     <div className='grid grid-cols-[auto_1fr_auto] gap-5'>
-      <Sidebar setShowLakes={setShowLakes} setShowCanals={setShowCanals} setShowReserviors={setShowReserviors}/>
+      <Sidebar setShowLakes={setShowLakes} setShowCanals={setShowCanals} setShowReserviors={setShowReserviors} setMarkers={setMarkers}/>
       <TerrainMap showLakes={showLakes} markers={markers} showReserviors={showReserviors} showCanals={showCanals}/>
       {user.role ==='expert' ? <Sortbar markers={markers} /> : ''}
     </div>
