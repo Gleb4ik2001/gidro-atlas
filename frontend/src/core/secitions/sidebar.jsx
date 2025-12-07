@@ -12,7 +12,7 @@ import {filters_data} from '../data/sidebar_data.jsx'
 import AddForm from './addForm.jsx';
 import axios from 'axios';
 
-const Filters = ({filters , handleSelectChange , handleSubmit}) => {
+const Filters = ({filters , handleSelectChange , handleSubmit , handleCancelSubmit}) => {
   return(
     <>
       <h1 className='uppercase font-light text-2xl border-color'>Фильтрация</h1>
@@ -34,6 +34,10 @@ const Filters = ({filters , handleSelectChange , handleSubmit}) => {
         <Button variant='contained' color='primary' onClick={handleSubmit} className='mt-2 w-full'>
           Применить фильтры
         </Button>
+        <Button variant='contained' color='secondary' onClick={handleCancelSubmit} className='mt-2 w-full'>
+          Отменить фильтры
+        </Button>
+
     </>
   )
 }
@@ -70,9 +74,25 @@ const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReservio
     }));
   };
 
+
+  const handleCancelSubmit = async () => {
+    try {
+      const token = localStorage.getItem("access");
+
+      const res = await axios.get(
+        "http://127.0.0.1:8000/api/main/objects/",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setMarkers(res.data);
+    } catch (err) {
+      console.error(err);
+    }};
+
   const handleSubmit = async () => {
     try {
-      console.log(filters);
       const token = localStorage.getItem("access");
 
       const res = await axios.get(
@@ -108,11 +128,11 @@ const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReservio
 
         <span className='divider mb-5'></span>
 
-        {user.role === 'expert' && open ? <Filters filters={filters} handleSelectChange={handleSelectChange} handleSubmit={handleSubmit} /> : ''}
+        {user.role === 'expert' && open ? <Filters filters={filters} handleSelectChange={handleSelectChange} handleSubmit={handleSubmit} handleCancelSubmit={handleCancelSubmit} /> : ''}
 
         <span className='divider mb-5'></span>
         {user.role === 'expert' ?
-          <Button variant='contained' color='secondary' onClick={()=> setForm(true)} className='mt-2 w-full'>
+          <Button variant='contained' color='success' onClick={()=> setForm(true)} className='mt-2 w-full'>
             Добавить точку
           </Button>: ''}
 

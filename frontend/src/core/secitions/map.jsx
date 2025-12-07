@@ -19,11 +19,11 @@ function InfoControl({ info, onClose }) {
   5: "Состояние критическое, нуждается в полной реконструкции или замене отдельных частей."
 };
   const technicalConditionStyle = {
-    1:'bg-green-500/20 dark:bg-green-500/20 border-green-500',
-    2:'bg-green-300',
-    3:'bg-yellow-500',
-    4: 'bg-orange-500',
-    5: 'bg-red-300'
+    1:'bg-green-500/20 border-green-500',
+    2:'bg-lime-500/20 border-lime-500',
+    3:'bg-yellow-500/20 border-yellow-500',
+    4: 'bg-orange-500/20 border-orange-500',
+    5: 'bg-red-500/20 border-red-500'
   }
   return (
     <div className="absolute inset-0 flex items-center justify-center z-[8000] bg-blue-800/40">
@@ -33,11 +33,11 @@ function InfoControl({ info, onClose }) {
           <button className="closeBtn px-2" onClick={onClose}>X</button>
         </div>
         <div className="grid grid-cols-2 gap-5 mt-5">
-          <h1 className="text-2xl flex items-end gap-2">Регион : <p className='font-normal'>{info.region}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Регион : <p className='font-normal'>{info.region_display}</p></h1>
           <h1 className="text-2xl flex items-end gap-2">Наличие фауны : <p className='font-normal'>{info.fauna ? 'да': 'нет'}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Тип ресурса : <p className='font-normal'>{info.resource_type}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Тип ресурса : <p className='font-normal'>{info.resource_type_display}</p></h1>
           <h1 className="text-2xl flex items-end gap-2">Дата : <p className='font-normal'>{info.passport_date}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Тип воды : <p className='font-normal'>{info.water_type}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Тип воды : <p className='font-normal'>{info.water_type_display}</p></h1>
           <h1 className="text-2xl flex items-end gap-2">Координаты: <p className='font-normal'>{info.coordinates[0]} - {info.coordinates[1]}</p></h1>
         </div>
         <div className={`flex flex-col gap-2 text-xl p-2 mt-10 mb-5 rounded border ${technicalConditionStyle[info.technical_condition]}`}>
