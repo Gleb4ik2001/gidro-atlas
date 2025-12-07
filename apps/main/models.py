@@ -56,14 +56,33 @@ class WaterObject(models.Model):
     pdf = models.FileField(verbose_name='пдф файл', upload_to="passports/", null=True, blank=True)
     priority = models.IntegerField(verbose_name='уровень приоритета',null=True, blank=True)
 
-    def calculate_priority(self):
-        age_years = 0
-        if self.passport_date:
-            age_years = (date.today() - self.passport_date).days // 365
 
+    def get_age_years(self):
+        if self.passport_date:
+            return (date.today() - self.passport_date).days // 365
+        return 0
+
+    def calculate_priority(self):
+        age_years = self.get_age_years(); 
         return (6 - self.technical_condition) * 3 + age_years
 
+    def calculate_technical_condition(self):
+        score = 5
+        age = self.get_age_years()
+        if age > 30:
+            score -= 2
+        elif age > 15:
+            score -= 1
+        if self.fauna:
+            score -= 1
+        if self.water_type == "nonfresh":
+            score -= 1
+        if self.resource_type == "canal":
+            score -= 1
+        return max(1, min(5, score))
+
     def save(self, *args, **kwargs):
+        self.technical_condition = self.calculate_technical_condition()
         self.priority = self.calculate_priority()
         super().save(*args, **kwargs)
 

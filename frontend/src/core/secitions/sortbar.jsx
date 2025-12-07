@@ -28,11 +28,15 @@ const Sortbar = ({setShowLakes , markers}) => {
     5: "Критическое"
   };
 
+
 const priorityText = (value) => {
-  if (value >= 0.8) return "Высокий";
-  if (value >= 0.5) return "Средний";
-  return "Низкий";
+  if (value == null || isNaN(value)) return "Неизвестно";
+
+  if (value <= 0.2) return "Высокий";   // низкая вероятность = высокий приоритет
+  if (value <= 0.5) return "Средний";   // средняя вероятность = средний приоритет
+  return "Низкий";                       // высокая вероятность = низкий приоритет
 };
+
 
   const demoRow = markers.map((item, index) => ({
     id: index + 1,

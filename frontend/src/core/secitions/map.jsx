@@ -32,13 +32,13 @@ function InfoControl({ info, onClose }) {
           <h1 className="text-3xl">{info.name}</h1>
           <button className="closeBtn px-2" onClick={onClose}>X</button>
         </div>
-        <div className="grid grid-cols-2 gap-5">
-          <h1 className="text-2xl flex items-end gap-2">Region : <p className='font-normal'>{info.region}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Fauna : <p className='font-normal'>{info.fauna ? 'есть': 'нету'}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Resource type : <p className='font-normal'>{info.resource_type}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Date : <p className='font-normal'>{info.passport_date}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Water type: <p className='font-normal'>{info.water_type}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Coordinates: <p className='font-normal'>{info.coordinates[0]} - {info.coordinates[1]}</p></h1>
+        <div className="grid grid-cols-2 gap-5 mt-5">
+          <h1 className="text-2xl flex items-end gap-2">Регион : <p className='font-normal'>{info.region}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Наличие фауны : <p className='font-normal'>{info.fauna ? 'есть': 'нету'}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Тип ресурса : <p className='font-normal'>{info.resource_type}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Дата : <p className='font-normal'>{info.passport_date}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Тип воды : <p className='font-normal'>{info.water_type}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Координаты: <p className='font-normal'>{info.coordinates[0]} - {info.coordinates[1]}</p></h1>
         </div>
         <div className={`flex flex-col gap-2 text-xl p-2 mt-10 mb-5 rounded border ${technicalConditionStyle[info.technical_condition]}`}>
           <h1 className="text-2xl">Состояние </h1>
