@@ -30,4 +30,4 @@ class WaterObjectViewSet(viewsets.ModelViewSet):
         if user.is_authenticated and user.role == "expert":
             return WaterObjectExpertSerializer
 
-        return WaterObjectGuestSerializer
+        return WaterObjectExpertSerializer

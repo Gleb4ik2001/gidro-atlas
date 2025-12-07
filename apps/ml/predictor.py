@@ -1,6 +1,7 @@
 import os
 import pickle
 
+
 BASE_DIR = os.path.dirname(__file__)
 MODEL_PATH = os.path.join(BASE_DIR, "model.pkl")
 
