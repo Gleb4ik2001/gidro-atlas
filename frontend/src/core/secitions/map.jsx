@@ -34,7 +34,7 @@ function InfoControl({ info, onClose }) {
         </div>
         <div className="grid grid-cols-2 gap-5 mt-5">
           <h1 className="text-2xl flex items-end gap-2">Регион : <p className='font-normal'>{info.region}</p></h1>
-          <h1 className="text-2xl flex items-end gap-2">Наличие фауны : <p className='font-normal'>{info.fauna ? 'есть': 'нету'}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Наличие фауны : <p className='font-normal'>{info.fauna ? 'да': 'нет'}</p></h1>
           <h1 className="text-2xl flex items-end gap-2">Тип ресурса : <p className='font-normal'>{info.resource_type}</p></h1>
           <h1 className="text-2xl flex items-end gap-2">Дата : <p className='font-normal'>{info.passport_date}</p></h1>
           <h1 className="text-2xl flex items-end gap-2">Тип воды : <p className='font-normal'>{info.water_type}</p></h1>
@@ -51,8 +51,8 @@ function InfoControl({ info, onClose }) {
             rel="noopener noreferrer"
             className="iconBtn text-2xl"
           >
-            Passport
-          </a>) : (<span className="text-gray-400 text-2xl">No Passport</span>)}
+            Паспорт
+          </a>) : (<span className="text-gray-400 text-2xl">Паспорт отсутствует</span>)}
       </div>
     </div>
   );
