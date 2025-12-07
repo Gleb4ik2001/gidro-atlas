@@ -46,7 +46,7 @@ function InfoControl({ info, onClose }) {
         </div>
         {info.pdf ? (
           <a
-            href={info.pdf.url}
+            href={info.pdf}
             target="_blank"
             rel="noopener noreferrer"
             className="iconBtn text-2xl"
