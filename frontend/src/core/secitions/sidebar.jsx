@@ -8,21 +8,14 @@ import Checkbox from '@mui/material/Checkbox';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-
-const fakeData = [
-  { name: 'regions', label: 'Выберите область', data: ['Qaragandy', 'Almaty', 'Balhash'] },
-  { name: 'resource', label: 'Выберите тип водного ресурса', data: ['озеро', 'водохранилище', 'канал'] },
-  { name: 'waterType', label: 'Выберите тип воды', data: ['пресная', 'непресная'] },
-  { name: 'fauna', label: 'Выберите наличие фауны', data: ['да', 'нет'] },
-  { name: 'passport', label: 'Выберите дату паспорта', data: ['2012-2014', '2014-2015', '2020-2025'] },
-  { name: 'category', label: 'Выберите категорию состояния', data: ['Категория 1', 'Категория 2', 'Категория 3', 'Категория 4', 'Категория 5'] },
-];
+import {filters_data} from '../data/sidebar_data.jsx'
+import AddForm from './addForm.jsx';
 
 const Filters = ({filters , handleSelectChange , handleSubmit}) => {
   return(
     <>
       <h1 className='uppercase font-light text-2xl border-color'>Фильтрация</h1>
-        {fakeData.map((data, j) => (
+        {filters_data.map((data, j) => (
           <select
             key={j}
             className='p-2 rounded blue-color cursor-pointer w-full mb-2'
@@ -32,7 +25,7 @@ const Filters = ({filters , handleSelectChange , handleSubmit}) => {
           >
             <option value="">{data.label}</option>
             {data.data.map((item, i) => (
-              <option key={i} value={item}>{item}</option>
+              <option key={i} value={item.value}>{item.label}</option>
             ))}
           </select>
         ))}
@@ -44,8 +37,11 @@ const Filters = ({filters , handleSelectChange , handleSubmit}) => {
   )
 }
 
+
+
 const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReserviors }) => {
   const [open, setOpen] = useState(true);
+  const [form , setForm] = useState(true);
   const [filters, setFilters] = useState({});
   const { user, logout } = useAuth();
 
@@ -103,8 +99,16 @@ const Sidebar = ({ setShowLakes, onFilterSubmit, setShowCanals , setShowReservio
         ))}
 
         <span className='divider mb-5'></span>
-        
+
         {user.role === 'expert' && open ? <Filters filters={filters} handleSelectChange={handleSelectChange} handleSubmit={handleSubmit} /> : ''}
+
+        <span className='divider mb-5'></span>
+        {user.role === 'expert' ?
+          <Button variant='contained' color='secondary' onClick={()=> setForm(true)} className='mt-2 w-full'>
+            Добавить точку
+          </Button>: ''}
+
+        {form ? <AddForm setForm={setForm}/> : ''}
 
       </div>
 

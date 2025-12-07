@@ -7,7 +7,7 @@ from .models import WaterObject
 class WaterObjectAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "region",
+        "get_region_display",
         "resource_type",
         "water_type",
         "technical_condition",

@@ -3,6 +3,8 @@ import Sidebar from './secitions/sidebar.jsx';
 import Sortbar from './secitions/sortbar.jsx';
 import TerrainMap from './secitions/map.jsx';
 import {useAuth} from '../auth/hooks.jsx';
+import axios from 'axios';
+import {useNavigate} from 'react-router';
 
 const fake = [
   {
@@ -38,22 +40,36 @@ const fake = [
 ]
 
 const Dashboard = () => {
+  let nav = useNavigate();
   const [showLakes , setShowLakes] = useState(false);
   const [showCanals , setShowCanals] = useState(false);
   const [showReserviors , setShowReserviors] = useState(false);
   const [markers , setMarkers] = useState([]);
+  const{user , logout} = useAuth();
 
-  const{user} = useAuth();
+ useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("access"); 
+        const res = await axios.get("http://127.0.0.1:8000/api/main/objects", {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+        console.log(res.data);
+        setMarkers(res.data);
+      } catch (e) {
+        nav('/login' , {replace: true});
+      }
+    };
 
-  useEffect(() => {
-    setMarkers(fake);
-  }, []);
+    fetchData();
+  }, []); 
   return (
     <div className='grid grid-cols-[auto_1fr_auto] gap-5'>
       <Sidebar setShowLakes={setShowLakes} setShowCanals={setShowCanals} setShowReserviors={setShowReserviors}/>
       <TerrainMap showLakes={showLakes} markers={markers} showReserviors={showReserviors} showCanals={showCanals}/>
-      {user.role ==='expert' ?
-      <Sortbar/> : ''}
+      {user.role ==='expert' ? <Sortbar markers={markers} /> : ''}
     </div>
   )
 }

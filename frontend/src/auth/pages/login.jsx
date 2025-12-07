@@ -25,8 +25,8 @@ const Login = () => {
     }
     else{
       setMsg({state: 'error' , detail:result.detail});
-      setUsrname();
-      setPwd();
+      setUsrname('');
+      setPwd('');
     }
   }
 

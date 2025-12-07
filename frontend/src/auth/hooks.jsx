@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = res.data;
+      console.log(data);
 
       const userData = {
         id: data.user.id,
@@ -54,12 +55,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
+  const logout =  () => {
+    try {
+      const res = axios.post("http://127.0.0.1:8000/api/auth/logout/");
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      return {
+        state: true,
+        detail: "Успешный вход!",};
+    }
+    catch (e) {
+      return {
+        state: false,
+        detail: e.response?.data?.detail || e.message,
+      };
+    }
   };
 
   return (

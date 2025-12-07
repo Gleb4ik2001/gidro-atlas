@@ -27,6 +27,11 @@
   @apply hover:border-blue-800 hover:bg-blue-800 hover:shadow-blue-800;
 }
 
+@utility red-color {
+  @apply border-red-800/50 bg-red-800/50;
+  @apply hover:border-red-800 hover:bg-red-800 hover:shadow-red-800;
+}
+
 @utility divider {
   @apply border-color w-full h-1 border-t-2;
 }
@@ -36,6 +41,9 @@
   @apply p-1 border blue-color  rounded cursor-pointer shadow-2xl;
 }
 
+@utility closeBtn {
+  @apply p-1 border red-color  rounded cursor-pointer shadow-2xl;
+}
 @utility inputStyle {
   @apply p-2 border blue-color  rounded cursor-pointer outline-0 text-2xl;
 }

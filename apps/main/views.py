@@ -1,32 +1,33 @@
-from rest_framework import viewsets, filters, permissions
+from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import WaterObject
-from .serializers import WaterObjectSerializer
+from .serializers import WaterObjectGuestSerializer, WaterObjectExpertSerializer
 from .filters import WaterObjectFilter
-from .permissions import IsExpert, IsGuest
+from .permissions import IsExpert, ReadOnly
 
 
 class WaterObjectViewSet(viewsets.ModelViewSet):
     queryset = WaterObject.objects.all()
-    serializer_class = WaterObjectSerializer
-
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter
-    ]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = WaterObjectFilter
 
     search_fields = ["name"]
     ordering_fields = [
-        "name", "region", "resource_type",
-        "water_type", "fauna", "passport_date",
-        "technical_condition", "priority"
+        "name", "region", "resource_type", "water_type", "fauna",
+        "passport_date", "technical_condition", "priority"
     ]
-
-    filterset_class = WaterObjectFilter
 
     def get_permissions(self):
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsExpert()]
-        return [IsGuest()]
+
+        return [ReadOnly()]
+
+    def get_serializer_class(self):
+        user = self.request.user
+        
+        if user.is_authenticated and user.role == "expert":
+            return WaterObjectExpertSerializer
+
+        return WaterObjectGuestSerializer

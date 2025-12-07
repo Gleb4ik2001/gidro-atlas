@@ -10,14 +10,83 @@ import kazakhstanCanals from '../data/waterWays_canals_cleaned.json';
 import kazakhstanReservoirs from '../data/waterWays_reservoir_cleaned.json';
 
 
-function InfoControl({ info }) {
+function InfoControl({ info, onClose }) {
+  const technicalConditionText = {
+  1: "Состояние отличное! полностью функционально и не требует дополнительного вмешательства.",
+  2: "Состояние хорошее, имеются незначительные дефекты или мелкие работы по обслуживанию.",
+  3: "Состояние удовлетворительное, требует небольшой текущей доработки и контроля.",
+  4: "Состояние плохое, необходимо проведение значительного ремонта и модернизации.",
+  5: "Состояние критическое, нуждается в полной реконструкции или замене отдельных частей."
+};
+  const technicalConditionStyle = {
+    1:'bg-green-500/20 dark:bg-green-500/20 border-green-500',
+    2:'bg-green-300',
+    3:'bg-yellow-500',
+    4: 'bg-orange-500',
+    5: 'bg-red-300'
+  }
   return (
-    <div className="info">
-      <h4>Kazakhstan Regions</h4>
-      {info ? <b>{info.name}</b> : 'Hover over a region'}
+    <div className="absolute inset-0 flex items-center justify-center z-[8000] bg-blue-800/40">
+      <div className="bg-white dark:bg-black min-w-1/3 min-h-1/3 p-5 rounded-xl cursor-default">
+        <div className="flex justify-between">
+          <h1 className="text-3xl">{info.name}</h1>
+          <button className="closeBtn px-2" onClick={onClose}>X</button>
+        </div>
+        <div className="grid grid-cols-2 gap-5">
+          <h1 className="text-2xl flex items-end gap-2">Region : <p className='font-normal'>{info.region}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Fauna : <p className='font-normal'>{info.fauna ? 'есть': 'нету'}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Resource type : <p className='font-normal'>{info.resource_type}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Date : <p className='font-normal'>{info.passport_date}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Water type: <p className='font-normal'>{info.water_type}</p></h1>
+          <h1 className="text-2xl flex items-end gap-2">Coordinates: <p className='font-normal'>{info.coordinates[0]} - {info.coordinates[1]}</p></h1>
+        </div>
+        <div className={`flex flex-col gap-2 text-xl p-2 mt-10 mb-5 rounded border ${technicalConditionStyle[info.technical_condition]}`}>
+          <h1 className="text-2xl">Состояние </h1>
+          <p className='font-normal'>{technicalConditionText[info.technical_condition]}</p>
+        </div>
+        {info.pdf ? (
+          <a
+            href={info.pdf}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="iconBtn text-2xl"
+          >
+            Passport
+          </a>) : (<span className="text-gray-400 text-2xl">No Passport</span>)}
+      </div>
     </div>
   );
 }
+
+function expertControl({ info, onClose }) {
+  const technicalConditionText = {
+  1: "Состояние отличное! полностью функционально и не требует дополнительного вмешательства.",
+  2: "Состояние хорошее, имеются незначительные дефекты или мелкие работы по обслуживанию.",
+  3: "Состояние удовлетворительное, требует небольшой текущей доработки и контроля.",
+  4: "Состояние плохое, необходимо проведение значительного ремонта и модернизации.",
+  5: "Состояние критическое, нуждается в полной реконструкции или замене отдельных частей."
+};
+  return (
+    <div className="absolute inset-0 flex items-center justify-center z-[8000] bg-blue-800/40">
+      <div className="bg-white dark:bg-black w-1/2 h-1/3 p-5 rounded-xl">
+        <div className="flex justify-between">
+          <h1 className="text-3xl">{info.name}</h1>
+          <button className="iconBtn p-3" onClick={onClose}>X</button>
+        </div>
+        <h1 className="mt-2 font-bold">{info.id}</h1>
+        <p>{info.region}</p>
+        <p>{info.fauna ? 'да': 'нет'}</p>
+        <p>{info.passport_date}</p>
+        <p>{info.resource_type}</p>
+        <p>{info.water_type}</p>
+        <p>{technicalConditionText[info.technical_condition]}</p>
+      </div>
+    </div>
+  );
+}
+
+
+
 
 function CountryBorder({ data }) {
   return <GeoJSON data={data} style={{ color: 'black', weight: 2, fillOpacity: 0 }} />;
@@ -53,10 +122,6 @@ function RiversLayer({ data }) {
           fillOpacity: 0.5,
           color: 'blue'
         });
-      });
-
-      layer.on('click', () => {
-        setInfo(feature.properties);
       });
     }
   };
@@ -120,10 +185,16 @@ const getIconByCategory = (category) => {
 };
 
 export default function TerrainMap({showLakes, showCanals, showReserviors, markers}) {
-  const [info, setInfo] = useState(null);
-
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   return (
+  <>
+  {selectedMarker && (
+  <InfoControl 
+    info={selectedMarker} 
+    onClose={() => setSelectedMarker(null)} 
+  />
+)}
     <MapContainer
       center={[48.0, 68.0]}
       zoom={5}
@@ -135,12 +206,15 @@ export default function TerrainMap({showLakes, showCanals, showReserviors, marke
       ]}
       style={{ height: '100vh', width: '100%' }}
     >
+    
       <TileLayer
-        url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
+        url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}"
         minZoom={0}
         maxZoom={20}
-        attribution='&copy; Stadia Maps &copy; OpenMapTiles &copy; OpenStreetMap contributors'
+        ext="png"
+        attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+
 
       <CountryBorder data={kazakhstanBorder} />
 
@@ -164,11 +238,12 @@ export default function TerrainMap({showLakes, showCanals, showReserviors, marke
       {markers && markers.map((marker, i) => (
         <Marker
           key={`marker-${i}`}
-          position={marker.postion}
-          icon={getIconByCategory(marker.category)}
+          position={marker.coordinates}
+          icon={getIconByCategory(marker.technical_condition)}
           eventHandlers={{
             mouseover: (e) => e.target.openPopup(),
             mouseout: (e) => e.target.closePopup(),
+            click: (e) => setSelectedMarker(marker) 
           }}
         >
           <Popup>
@@ -180,9 +255,10 @@ export default function TerrainMap({showLakes, showCanals, showReserviors, marke
         </Marker>
       ))}
 
-      {/* информация о регионе */}
-      <InfoControl info={info} />
+    
     </MapContainer>
+
+  </>
   );
 }
 
